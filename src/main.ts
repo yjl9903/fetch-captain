@@ -2,8 +2,9 @@ import * as core from '@actions/core';
 import axios from 'axios';
 import format from 'date-fns/format';
 import { writeFileSync } from 'fs';
+import { sendEmail } from './email';
 
-import { toCSV, toMarkdown } from './output';
+import { toCSV } from './output';
 import { User } from './types';
 
 class Client {
@@ -13,6 +14,23 @@ class Client {
   constructor(roomid: string, ruid: string) {
     this.roomid = roomid;
     this.ruid = ruid;
+  }
+
+  async getUP(): Promise<User> {
+    try {
+      const { data } = await axios.get('https://api.bilibili.com/x/space/acc/info', {
+        params: {
+          mid: this.ruid
+        }
+      });
+      return {
+        uid: data.data.mid,
+        username: data.data.name
+      };
+    } catch (error: unknown) {
+      core.setFailed(error as any);
+      process.exit(1);
+    }
   }
 
   private async fetch(page: number): Promise<User[]> {
@@ -61,22 +79,18 @@ async function run(): Promise<void> {
   const list = await client.get();
 
   {
-    const csvname = `${today()}.csv`;
-    const content = toCSV(list);
-    writeFileSync(csvname, content, 'utf-8');
-  }
-  {
-    const mdname = `${today()}.md`;
-    const content = toMarkdown(list);
-    writeFileSync(mdname, content, 'utf-8');
-  }
-
-  {
     let cnt = 1;
     for (const user of list) {
       core.info(`${cnt++}. ${user.username} (uid: ${user.uid})`);
     }
   }
+
+  {
+    const csvname = `${today()}.csv`;
+    const content = toCSV(list);
+    writeFileSync(csvname, content, 'utf-8');
+  }
+  sendEmail(await client.getUP(), list);
 }
 
 run();

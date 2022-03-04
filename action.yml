@@ -9,6 +9,18 @@ inputs:
   ruid:
     required: true
     description: 'up主uid'
+  sender:
+    required: false
+    description: '发信人'
+  sender_host:
+    required: false
+    description: 'SMTP Host'
+  sender_pass:
+    required: false
+    description: '发信人密码'
+  receiver:
+    required: false
+    description: '收信人'
 
 runs:
   using: 'node16'
