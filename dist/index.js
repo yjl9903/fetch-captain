@@ -130,9 +130,10 @@ run();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toMarkdown = exports.toCSV = void 0;
 function toCSV(list) {
-    const text = ['uid,username'];
+    const text = ['rank,uid,username'];
+    let cnt = 1;
     for (const user of list) {
-        text.push(`${user.uid},${user.username}`);
+        text.push(`${cnt++},${user.uid},${user.username}`);
     }
     return text.join('\n');
 }
