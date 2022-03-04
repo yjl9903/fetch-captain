@@ -197,7 +197,9 @@ class Client {
                 }
                 ans.push(...res);
             }
-            return ans.map((u) => ({ uid: u.uid, username: u.username }));
+            return ans
+                .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
+                .sort((lhs, rhs) => { var _a, _b; return ((_a = lhs.level) !== null && _a !== void 0 ? _a : 3) - ((_b = rhs.level) !== null && _b !== void 0 ? _b : 3); });
         });
     }
 }
@@ -222,7 +224,7 @@ function run() {
             const content = (0, output_1.toCSV)(list);
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
         }
-        (0, email_1.sendEmail)(yield client.getUP(), list);
+        yield (0, email_1.sendEmail)(yield client.getUP(), list);
     });
 }
 run();
@@ -236,21 +238,31 @@ run();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toMarkdown = exports.toCSV = void 0;
+exports.toMarkdown = exports.toCSV = exports.getType = void 0;
+function getType(level) {
+    if (level === 3)
+        return '舰长';
+    if (level === 2)
+        return '提督';
+    if (level === 1)
+        return '总督';
+    return '舰长';
+}
+exports.getType = getType;
 function toCSV(list) {
-    const text = ['rank,uid,username'];
+    const text = ['rank,uid,username,type'];
     let cnt = 1;
     for (const user of list) {
-        text.push(`${cnt++},${user.uid},${user.username}`);
+        text.push(`${cnt++},${user.uid},${user.username},${getType(user.level)}`);
     }
     return text.join('\n');
 }
 exports.toCSV = toCSV;
 function toMarkdown(list) {
-    const text = ['|序号|UID|用户名|', '|:-:|:-:|:-:|'];
+    const text = ['|序号|UID|用户名|大航海|', '|:-:|:-:|:-:|:-:|'];
     let cnt = 1;
     for (const user of list) {
-        text.push(`|${cnt++}|${user.uid}|${user.username}|`);
+        text.push(`|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|`);
     }
     return text.join('\n');
 }

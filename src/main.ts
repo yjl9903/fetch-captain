@@ -33,7 +33,7 @@ class Client {
     }
   }
 
-  private async fetch(page: number): Promise<User[]> {
+  private async fetch(page: number): Promise<Array<User & { guard_level: number }>> {
     try {
       const { data } = await axios.get('https://api.live.bilibili.com/guard/topList', {
         params: {
@@ -62,7 +62,9 @@ class Client {
       }
       ans.push(...res);
     }
-    return ans.map((u) => ({ uid: u.uid, username: u.username }));
+    return ans
+      .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
+      .sort((lhs, rhs) => (lhs.level ?? 3) - (rhs.level ?? 3));
   }
 }
 
@@ -90,7 +92,8 @@ async function run(): Promise<void> {
     const content = toCSV(list);
     writeFileSync(csvname, content, 'utf-8');
   }
-  sendEmail(await client.getUP(), list);
+
+  await sendEmail(await client.getUP(), list);
 }
 
 run();
