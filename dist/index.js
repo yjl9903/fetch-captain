@@ -203,8 +203,8 @@ class Client {
         });
     }
 }
-function today() {
-    const date = new Date();
+function today(offset = 0) {
+    const date = new Date(new Date().getTime() - offset);
     return (0, format_1.default)(date, 'yyyy-MM-dd');
 }
 function run() {
@@ -220,7 +220,7 @@ function run() {
             }
         }
         {
-            const csvname = `${today()}.csv`;
+            const csvname = `${today(+core.getInput('offset'))}.csv`;
             const content = (0, output_1.toCSV)(list);
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
         }

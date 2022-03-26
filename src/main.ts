@@ -68,8 +68,8 @@ class Client {
   }
 }
 
-function today(): string {
-  const date = new Date();
+function today(offset = 0): string {
+  const date = new Date(new Date().getTime() - offset);
   return format(date, 'yyyy-MM-dd');
 }
 
@@ -88,7 +88,7 @@ async function run(): Promise<void> {
   }
 
   {
-    const csvname = `${today()}.csv`;
+    const csvname = `${today(+core.getInput('offset'))}.csv`;
     const content = toCSV(list);
     writeFileSync(csvname, content, 'utf-8');
   }
