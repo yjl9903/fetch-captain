@@ -1,5 +1,6 @@
 name: 'build-test'
-on: # rebuild any PRs and main branch changes
+
+on:
   pull_request:
   push:
     branches:
@@ -11,19 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - uses: pnpm/action-setup@v2
-        with:
-          version: 6.30.1
-      - run: |
-          pnpm install
-      - run: |
-          pnpm run all
+
+      - run: pnpm install
+
+      - run: pnpm run all
+
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
       - name: Set Timezone
         run: sudo timedatectl set-timezone "Asia/Shanghai"
+
       - uses: actions/checkout@v3
+
       - uses: ./
         with:
           roomid: '21672023'
