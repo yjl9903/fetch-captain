@@ -4,7 +4,7 @@ specifiers:
   '@actions/core': ^1.9.0
   '@types/markdown-it': 12.2.3
   '@types/node': 18.0.3
-  '@types/nodemailer': 6.4.4
+  '@types/nodemailer': 6.4.5
   '@vercel/ncc': 0.34.0
   axios: ^0.27.2
   date-fns: ^2.29.1
@@ -26,7 +26,7 @@ dependencies:
 devDependencies:
   '@types/markdown-it': 12.2.3
   '@types/node': 18.0.3
-  '@types/nodemailer': 6.4.4
+  '@types/nodemailer': 6.4.5
   '@vercel/ncc': 0.34.0
   execa: 6.1.0
   fs-extra: 10.1.0
@@ -67,8 +67,8 @@ packages:
     resolution: {integrity: sha512-HzNRZtp4eepNitP+BD6k2L6DROIDG4Q0fm4x+dwfsr6LGmROENnok75VGw40628xf+iR24WeMFcHuuBDUAzzsQ==}
     dev: true
 
-  /@types/nodemailer/6.4.4:
-    resolution: {integrity: sha512-Ksw4t7iliXeYGvIQcSIgWQ5BLuC/mljIEbjf615svhZL10PE9t+ei8O9gDaD3FPCasUJn9KTLwz2JFJyiiyuqw==}
+  /@types/nodemailer/6.4.5:
+    resolution: {integrity: sha512-zuP3nBRQHI6M2PkXnGGy1Ww4VB+MyYHGgnfV2T+JR9KLkeWqPJuyVUgLpKXuFnA/b7pZaIDFh2sV4759B7jK1g==}
     dependencies:
       '@types/node': 18.0.3
     dev: true
