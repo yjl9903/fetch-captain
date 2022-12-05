@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@actions/core': ^1.9.0
   '@types/markdown-it': 12.2.3
-  '@types/node': 18.11.10
+  '@types/node': 18.11.11
   '@types/nodemailer': 6.4.5
   '@vercel/ncc': 0.34.0
   axios: ^0.27.2
@@ -25,7 +25,7 @@ dependencies:
 
 devDependencies:
   '@types/markdown-it': 12.2.3
-  '@types/node': 18.11.10
+  '@types/node': 18.11.11
   '@types/nodemailer': 6.4.5
   '@vercel/ncc': 0.34.0
   execa: 6.1.0
@@ -63,14 +63,14 @@ packages:
     resolution: {integrity: sha512-eC4U9MlIcu2q0KQmXszyn5Akca/0jrQmwDRgpAMJai7qBWq4amIQhZyNau4VYGtCeALvW1/NtjzJJ567aZxfKA==}
     dev: true
 
-  /@types/node/18.11.10:
-    resolution: {integrity: sha512-juG3RWMBOqcOuXC643OAdSA525V44cVgGV6dUDuiFtss+8Fk5x1hI93Rsld43VeJVIeqlP9I7Fn9/qaVqoEAuQ==}
+  /@types/node/18.11.11:
+    resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
     dev: true
 
   /@types/nodemailer/6.4.5:
     resolution: {integrity: sha512-zuP3nBRQHI6M2PkXnGGy1Ww4VB+MyYHGgnfV2T+JR9KLkeWqPJuyVUgLpKXuFnA/b7pZaIDFh2sV4759B7jK1g==}
     dependencies:
-      '@types/node': 18.11.10
+      '@types/node': 18.11.11
     dev: true
 
   /@vercel/ncc/0.34.0:
