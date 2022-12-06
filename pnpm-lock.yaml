@@ -5,7 +5,7 @@ specifiers:
   '@types/markdown-it': 12.2.3
   '@types/node': 18.11.11
   '@types/nodemailer': 6.4.5
-  '@vercel/ncc': 0.34.0
+  '@vercel/ncc': 0.36.0
   axios: ^0.27.2
   date-fns: ^2.29.1
   execa: 6.1.0
@@ -27,7 +27,7 @@ devDependencies:
   '@types/markdown-it': 12.2.3
   '@types/node': 18.11.11
   '@types/nodemailer': 6.4.5
-  '@vercel/ncc': 0.34.0
+  '@vercel/ncc': 0.36.0
   execa: 6.1.0
   fs-extra: 11.1.0
   js-yaml: 4.1.0
@@ -73,8 +73,8 @@ packages:
       '@types/node': 18.11.11
     dev: true
 
-  /@vercel/ncc/0.34.0:
-    resolution: {integrity: sha512-G9h5ZLBJ/V57Ou9vz5hI8pda/YQX5HQszCs3AmIus3XzsmRn/0Ptic5otD3xVST8QLKk7AMk7AqpsyQGN7MZ9A==}
+  /@vercel/ncc/0.36.0:
+    resolution: {integrity: sha512-/ZTUJ/ZkRt694k7KJNimgmHjtQcRuVwsST2Z6XfYveQIuBbHR+EqkTc1jfgPkQmMyk/vtpxo3nVxe8CNuau86A==}
     hasBin: true
     dev: true
 
