@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/markdown-it": "12.2.3",
-    "@types/node": "18.11.15",
+    "@types/node": "18.11.16",
     "@types/nodemailer": "6.4.5",
     "@vercel/ncc": "0.36.0",
     "execa": "6.1.0",
