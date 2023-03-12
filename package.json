@@ -32,7 +32,7 @@
     "@types/node": "18.15.0",
     "@types/nodemailer": "6.4.5",
     "@vercel/ncc": "0.36.1",
-    "execa": "7.0.0",
+    "execa": "7.1.0",
     "fs-extra": "11.1.0",
     "js-yaml": "4.1.0",
     "prettier": "2.8.4",
