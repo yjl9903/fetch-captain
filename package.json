@@ -19,7 +19,7 @@
     "build": "tsc",
     "format": "prettier --write ./src/*.ts",
     "package": "ncc build --license licenses.txt",
-    "release": "node ./scripts/release.js"
+    "release": "node ./scripts/release.mjs"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",

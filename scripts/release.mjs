@@ -1,5 +1,5 @@
-const { readJSON, writeJSON } = require('fs-extra');
-const execa = require('execa');
+import { execa } from 'execa';
+import { readJSON, writeJSON } from 'fs-extra';
 
 async function check() {
   const result = await execa('git', ['branch']);
