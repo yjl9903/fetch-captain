@@ -96,6 +96,7 @@ async function run(): Promise<void> {
   {
     const csvname = path.join(core.getInput('outDir'), `${today(+core.getInput('offset'))}.csv`);
     const content = toCSV(list);
+    core.info(`---------------------------------------`);
     core.info(`Writing to ${csvname}`);
     core.setOutput('csv', csvname);
     writeFileSync(csvname, content, 'utf-8');

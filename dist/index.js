@@ -226,6 +226,7 @@ function run() {
         {
             const csvname = path_1.default.join(core.getInput('outDir'), `${today(+core.getInput('offset'))}.csv`);
             const content = (0, output_1.toCSV)(list);
+            core.info(`---------------------------------------`);
             core.info(`Writing to ${csvname}`);
             core.setOutput('csv', csvname);
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
