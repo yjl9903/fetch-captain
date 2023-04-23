@@ -19,19 +19,17 @@ class Client {
 
   async getUP(): Promise<User> {
     try {
-      const { data } = await retry(
-        () =>
-          axios.get('https://api.bilibili.com/x/space/acc/info', {
-            params: {
-              mid: this.ruid
-            }
-          }),
-        10
-      );
-      return {
-        uid: data.data.mid,
-        username: data.data.name
-      };
+      return await retry(async () => {
+        const { data } = await axios.get('https://api.bilibili.com/x/space/acc/info', {
+          params: {
+            mid: this.ruid
+          }
+        });
+        return {
+          uid: data.data.mid,
+          username: data.data.name
+        };
+      }, 10);
     } catch (error: unknown) {
       core.setFailed(error as any);
       process.exit(1);

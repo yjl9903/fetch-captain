@@ -149,15 +149,17 @@ class Client {
     getUP() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { data } = yield (0, utils_1.retry)(() => axios_1.default.get('https://api.bilibili.com/x/space/acc/info', {
-                    params: {
-                        mid: this.ruid
-                    }
+                return yield (0, utils_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
+                    const { data } = yield axios_1.default.get('https://api.bilibili.com/x/space/acc/info', {
+                        params: {
+                            mid: this.ruid
+                        }
+                    });
+                    return {
+                        uid: data.data.mid,
+                        username: data.data.name
+                    };
                 }), 10);
-                return {
-                    uid: data.data.mid,
-                    username: data.data.name
-                };
             }
             catch (error) {
                 core.setFailed(error);
