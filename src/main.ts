@@ -6,7 +6,7 @@ import path from 'path';
 import { writeFileSync } from 'fs';
 
 import { User } from './types';
-import { retry } from './utils';
+import { padLeft, retry } from './utils';
 import { sendEmail } from './email';
 import { getType, toCSV } from './output';
 
@@ -89,8 +89,13 @@ async function run(): Promise<void> {
 
   {
     let cnt = 1;
+    const width = String(list.length).length;
     for (const user of list) {
-      core.info(`${cnt++}. ${getType(user.level)} ${user.username} (uid: ${user.uid})`);
+      core.info(
+        `${padLeft(String(cnt++), width)}. ${getType(user.level)} ${user.username} (uid: ${
+          user.uid
+        })`
+      );
     }
   }
   {

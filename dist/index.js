@@ -219,8 +219,9 @@ function run() {
         const list = yield client.get();
         {
             let cnt = 1;
+            const width = String(list.length).length;
             for (const user of list) {
-                core.info(`${cnt++}. ${(0, output_1.getType)(user.level)} ${user.username} (uid: ${user.uid})`);
+                core.info(`${(0, utils_1.padLeft)(String(cnt++), width)}. ${(0, output_1.getType)(user.level)} ${user.username} (uid: ${user.uid})`);
             }
         }
         {
@@ -1245,7 +1246,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sleep = exports.retry = void 0;
+exports.padLeft = exports.sleep = exports.retry = void 0;
 function retry(fn, count = 5) {
     return __awaiter(this, void 0, void 0, function* () {
         for (let i = 0, time = 1000; i < count; i++) {
@@ -1273,6 +1274,10 @@ function sleep(ms) {
     });
 }
 exports.sleep = sleep;
+function padLeft(text, length, space = ' ') {
+    return space.repeat(length - text.length) + text;
+}
+exports.padLeft = padLeft;
 
 
 /***/ }),

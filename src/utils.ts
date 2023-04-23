@@ -21,3 +21,7 @@ export function sleep(ms: number): Promise<void> {
     setTimeout(() => res(), ms);
   });
 }
+
+export function padLeft(text: string, length: number, space = ' ') {
+  return space.repeat(length - text.length) + text;
+}
