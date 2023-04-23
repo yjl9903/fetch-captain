@@ -3,7 +3,7 @@ import axios from 'axios';
 import format from 'date-fns/format';
 
 import path from 'path';
-import { writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 import { User } from './types';
 import { padLeft, retry } from './utils';
@@ -99,11 +99,15 @@ async function run(): Promise<void> {
     }
   }
   {
-    const csvname = path.join(core.getInput('outDir'), `${today(+core.getInput('offset'))}.csv`);
+    const outDir = core.getInput('outDir');
+    const csvname = path.join(outDir, `${today(+core.getInput('offset'))}.csv`);
     const content = toCSV(list);
     core.info(`---------------------------------------`);
     core.info(`Writing to ${csvname}`);
     core.setOutput('csv', csvname);
+    if (!existsSync(outDir)) {
+      mkdirSync(outDir, { recursive: true });
+    }
     writeFileSync(csvname, content, 'utf-8');
   }
 
