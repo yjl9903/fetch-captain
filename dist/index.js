@@ -139,8 +139,8 @@ const axios_1 = __importDefault(__nccwpck_require__(7268));
 const format_1 = __importDefault(__nccwpck_require__(4269));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __nccwpck_require__(7147);
-const utils_1 = __nccwpck_require__(6548);
 const email_1 = __nccwpck_require__(7048);
+const utils_1 = __nccwpck_require__(6548);
 const output_1 = __nccwpck_require__(764);
 class Client {
     constructor(roomid, ruid) {
@@ -225,11 +225,15 @@ function run() {
             }
         }
         {
-            const csvname = path_1.default.join(core.getInput('outDir'), `${today(+core.getInput('offset'))}.csv`);
+            const outDir = core.getInput('outDir');
+            const csvname = path_1.default.join(outDir, `${today(+core.getInput('offset'))}.csv`);
             const content = (0, output_1.toCSV)(list);
             core.info(`---------------------------------------`);
             core.info(`Writing to ${csvname}`);
             core.setOutput('csv', csvname);
+            if (!(0, fs_1.existsSync)(outDir)) {
+                (0, fs_1.mkdirSync)(outDir, { recursive: true });
+            }
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
         }
         yield (0, email_1.sendEmail)(yield client.getUP(), list);

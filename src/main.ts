@@ -6,8 +6,8 @@ import path from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 import { User } from './types';
-import { padLeft, retry } from './utils';
 import { sendEmail } from './email';
+import { padLeft, retry } from './utils';
 import { getType, toCSV } from './output';
 
 class Client {
