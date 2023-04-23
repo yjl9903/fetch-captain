@@ -5,13 +5,17 @@ author: 'yjl9903'
 inputs:
   roomid:
     required: true
-    description: '直播房间id'
+    description: '直播房间 id'
   ruid:
     required: true
-    description: 'up主uid'
+    description: 'up 主 uid'
+  outDir:
+    required: false
+    description: '输出目录'
+    default: './'
   offset:
     required: false
-    description: '时间偏移量 (文件名)'
+    description: '时间偏移量'
     default: '0'
   sender:
     required: false

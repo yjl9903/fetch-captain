@@ -137,9 +137,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7733));
 const axios_1 = __importDefault(__nccwpck_require__(7268));
 const format_1 = __importDefault(__nccwpck_require__(4269));
+const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __nccwpck_require__(7147);
-const email_1 = __nccwpck_require__(7048);
 const utils_1 = __nccwpck_require__(6548);
+const email_1 = __nccwpck_require__(7048);
 const output_1 = __nccwpck_require__(764);
 class Client {
     constructor(roomid, ruid) {
@@ -219,12 +220,14 @@ function run() {
         {
             let cnt = 1;
             for (const user of list) {
-                core.info(`${cnt++}. ${user.username} (uid: ${user.uid})`);
+                core.info(`${cnt++}. ${(0, output_1.getType)(user.level)} ${user.username} (uid: ${user.uid})`);
             }
         }
         {
-            const csvname = `${today(+core.getInput('offset'))}.csv`;
+            const csvname = path_1.default.join(core.getInput('outDir'), `${today(+core.getInput('offset'))}.csv`);
             const content = (0, output_1.toCSV)(list);
+            core.info(`Writing to ${csvname}`);
+            core.setOutput('csv', csvname);
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
         }
         yield (0, email_1.sendEmail)(yield client.getUP(), list);

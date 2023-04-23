@@ -1,12 +1,14 @@
 import * as core from '@actions/core';
 import axios from 'axios';
 import format from 'date-fns/format';
+
+import path from 'path';
 import { writeFileSync } from 'fs';
-import { sendEmail } from './email';
 
 import { User } from './types';
 import { retry } from './utils';
-import { toCSV } from './output';
+import { sendEmail } from './email';
+import { getType, toCSV } from './output';
 
 class Client {
   private readonly roomid: string;
@@ -88,13 +90,14 @@ async function run(): Promise<void> {
   {
     let cnt = 1;
     for (const user of list) {
-      core.info(`${cnt++}. ${user.username} (uid: ${user.uid})`);
+      core.info(`${cnt++}. ${getType(user.level)} ${user.username} (uid: ${user.uid})`);
     }
   }
-
   {
-    const csvname = `${today(+core.getInput('offset'))}.csv`;
+    const csvname = path.join(core.getInput('outDir'), `${today(+core.getInput('offset'))}.csv`);
     const content = toCSV(list);
+    core.info(`Writing to ${csvname}`);
+    core.setOutput('csv', csvname);
     writeFileSync(csvname, content, 'utf-8');
   }
 
