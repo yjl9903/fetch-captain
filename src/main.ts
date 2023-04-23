@@ -4,8 +4,9 @@ import format from 'date-fns/format';
 import { writeFileSync } from 'fs';
 import { sendEmail } from './email';
 
-import { toCSV } from './output';
 import { User } from './types';
+import { retry } from './utils';
+import { toCSV } from './output';
 
 class Client {
   private readonly roomid: string;
@@ -18,11 +19,15 @@ class Client {
 
   async getUP(): Promise<User> {
     try {
-      const { data } = await axios.get('https://api.bilibili.com/x/space/acc/info', {
-        params: {
-          mid: this.ruid
-        }
-      });
+      const { data } = await retry(
+        () =>
+          axios.get('https://api.bilibili.com/x/space/acc/info', {
+            params: {
+              mid: this.ruid
+            }
+          }),
+        10
+      );
       return {
         uid: data.data.mid,
         username: data.data.name
@@ -35,13 +40,15 @@ class Client {
 
   private async fetch(page: number): Promise<Array<User & { guard_level: number }>> {
     try {
-      const { data } = await axios.get('https://api.live.bilibili.com/guard/topList', {
-        params: {
-          roomid: this.roomid,
-          ruid: this.ruid,
-          page
-        }
-      });
+      const { data } = await retry(() =>
+        axios.get('https://api.live.bilibili.com/guard/topList', {
+          params: {
+            roomid: this.roomid,
+            ruid: this.ruid,
+            page
+          }
+        })
+      );
       if (page === 1) {
         return [...data.data.top3, ...data.data.list];
       } else {
