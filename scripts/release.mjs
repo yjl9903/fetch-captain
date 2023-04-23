@@ -1,5 +1,5 @@
 import { execa } from 'execa';
-import { readJSON, writeJSON } from 'fs-extra';
+import { readJSON, writeJSON } from 'fs-extra/esm';
 
 async function check() {
   const result = await execa('git', ['branch']);
