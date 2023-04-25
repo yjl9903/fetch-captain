@@ -6,6 +6,7 @@ import format from 'date-fns/format';
 
 import { User } from './types';
 import { style } from './style';
+import { Client } from './client';
 import { toMarkdown } from './output';
 
 const md = new MarkdownIt();
@@ -22,7 +23,7 @@ function render(template: string, up: User, users: User[]): string {
   return `<div class="markdown-body">${md.render(content)}</div><style>${style}</style>`;
 }
 
-export async function sendEmail(up: User, users: User[]): Promise<void> {
+export async function sendEmail(client: Client, users: User[]): Promise<void> {
   const sender = core.getInput('sender');
   const senderHost = core.getInput('sender_host');
   const senderPass = core.getInput('sender_pass');
@@ -40,6 +41,7 @@ export async function sendEmail(up: User, users: User[]): Promise<void> {
     }
   });
 
+  const up = await client.getUP();
   const template = readFileSync('./template.md', 'utf-8');
   const content = render(template, up, users);
 

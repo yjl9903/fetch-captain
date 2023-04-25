@@ -8,7 +8,7 @@ export async function retry<T>(fn: () => Promise<T>, count = 5) {
         throw error;
       }
       await sleep(time);
-      if (time * 2 <= 60 * 1000) {
+      if (time * 2 <= 2 * 60 * 1000) {
         time = time * 2;
       }
     }

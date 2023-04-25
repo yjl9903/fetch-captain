@@ -1,6 +1,121 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 3134:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Client = void 0;
+const core = __importStar(__nccwpck_require__(7733));
+const axios_1 = __importDefault(__nccwpck_require__(7268));
+const utils_1 = __nccwpck_require__(6548);
+class Client {
+    constructor(roomid, ruid) {
+        this.roomid = roomid;
+        this.ruid = ruid;
+    }
+    getUP() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield (0, utils_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
+                    const { data } = yield axios_1.default.get('https://api.bilibili.com/x/space/acc/info', {
+                        params: {
+                            mid: this.ruid
+                        }
+                    });
+                    return {
+                        uid: data.data.mid,
+                        username: data.data.name
+                    };
+                }), 50);
+            }
+            catch (error) {
+                core.setFailed(error);
+                process.exit(1);
+            }
+        });
+    }
+    fetch(page) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { data } = yield (0, utils_1.retry)(() => axios_1.default.get('https://api.live.bilibili.com/guard/topList', {
+                    params: {
+                        roomid: this.roomid,
+                        ruid: this.ruid,
+                        page
+                    }
+                }));
+                if (page === 1) {
+                    return [...data.data.top3, ...data.data.list];
+                }
+                else {
+                    return data.data.list;
+                }
+            }
+            catch (error) {
+                core.setFailed(error);
+                process.exit(1);
+            }
+        });
+    }
+    get() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ans = [];
+            for (let i = 1;; i++) {
+                const res = yield this.fetch(i);
+                if (res.length === 0) {
+                    break;
+                }
+                ans.push(...res);
+            }
+            return ans
+                .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
+                .sort((lhs, rhs) => { var _a, _b; return ((_a = lhs.level) !== null && _a !== void 0 ? _a : 3) - ((_b = rhs.level) !== null && _b !== void 0 ? _b : 3); });
+        });
+    }
+}
+exports.Client = Client;
+
+
+/***/ }),
+
 /***/ 7048:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -61,7 +176,7 @@ function render(template, up, users) {
         .replace(/{today:full}/g, (0, format_1.default)(date, 'yyyy 年 M 月 d 日 HH:mm'));
     return `<div class="markdown-body">${md.render(content)}</div><style>${style_1.style}</style>`;
 }
-function sendEmail(up, users) {
+function sendEmail(client, users) {
     return __awaiter(this, void 0, void 0, function* () {
         const sender = core.getInput('sender');
         const senderHost = core.getInput('sender_host');
@@ -78,6 +193,7 @@ function sendEmail(up, users) {
                 pass: senderPass
             }
         });
+        const up = yield client.getUP();
         const template = (0, fs_1.readFileSync)('./template.md', 'utf-8');
         const content = render(template, up, users);
         yield transport.sendMail({
@@ -135,78 +251,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7733));
-const axios_1 = __importDefault(__nccwpck_require__(7268));
 const format_1 = __importDefault(__nccwpck_require__(4269));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __nccwpck_require__(7147);
-const email_1 = __nccwpck_require__(7048);
+const client_1 = __nccwpck_require__(3134);
 const utils_1 = __nccwpck_require__(6548);
+const email_1 = __nccwpck_require__(7048);
 const output_1 = __nccwpck_require__(764);
-class Client {
-    constructor(roomid, ruid) {
-        this.roomid = roomid;
-        this.ruid = ruid;
-    }
-    getUP() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield (0, utils_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
-                    const { data } = yield axios_1.default.get('https://api.bilibili.com/x/space/acc/info', {
-                        params: {
-                            mid: this.ruid
-                        }
-                    });
-                    return {
-                        uid: data.data.mid,
-                        username: data.data.name
-                    };
-                }), 10);
-            }
-            catch (error) {
-                core.setFailed(error);
-                process.exit(1);
-            }
-        });
-    }
-    fetch(page) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { data } = yield (0, utils_1.retry)(() => axios_1.default.get('https://api.live.bilibili.com/guard/topList', {
-                    params: {
-                        roomid: this.roomid,
-                        ruid: this.ruid,
-                        page
-                    }
-                }));
-                if (page === 1) {
-                    return [...data.data.top3, ...data.data.list];
-                }
-                else {
-                    return data.data.list;
-                }
-            }
-            catch (error) {
-                core.setFailed(error);
-                process.exit(1);
-            }
-        });
-    }
-    get() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const ans = [];
-            for (let i = 1;; i++) {
-                const res = yield this.fetch(i);
-                if (res.length === 0) {
-                    break;
-                }
-                ans.push(...res);
-            }
-            return ans
-                .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
-                .sort((lhs, rhs) => { var _a, _b; return ((_a = lhs.level) !== null && _a !== void 0 ? _a : 3) - ((_b = rhs.level) !== null && _b !== void 0 ? _b : 3); });
-        });
-    }
-}
 function today(offset = 0) {
     const date = new Date(new Date().getTime() - offset);
     return (0, format_1.default)(date, 'yyyy-MM-dd');
@@ -215,7 +266,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const roomid = core.getInput('roomid');
         const ruid = core.getInput('ruid');
-        const client = new Client(roomid, ruid);
+        const client = new client_1.Client(roomid, ruid);
         const list = yield client.get();
         {
             let cnt = 1;
@@ -236,7 +287,7 @@ function run() {
             }
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
         }
-        yield (0, email_1.sendEmail)(yield client.getUP(), list);
+        yield (0, email_1.sendEmail)(client, list);
     });
 }
 run();
@@ -1263,7 +1314,7 @@ function retry(fn, count = 5) {
                     throw error;
                 }
                 yield sleep(time);
-                if (time * 2 <= 60 * 1000) {
+                if (time * 2 <= 2 * 60 * 1000) {
                     time = time * 2;
                 }
             }
