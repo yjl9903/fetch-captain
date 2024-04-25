@@ -1,10 +1,25 @@
-import { User } from './types';
+import * as core from '@actions/core';
 
-export function getType(level?: number): string {
+import type { User } from './types';
+
+import { padLeft } from './utils';
+
+function getType(level?: number): string {
   if (level === 3) return '舰长';
   if (level === 2) return '提督';
   if (level === 1) return '总督';
   return '舰长';
+}
+
+export function printUsers(list: User[]) {
+  let cnt = 1;
+  const width = String(list.length).length;
+  for (const user of list) {
+    const index = padLeft(String(cnt++), width);
+    const type = getType(user.level);
+    const accompany = user.accompany ? `, accompany: ${user.accompany}` : '';
+    core.info(`${index}. ${type} ${user.username} (uid: ${user.uid}${accompany})`);
+  }
 }
 
 export function toCSV(list: User[]): string {

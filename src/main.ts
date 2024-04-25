@@ -5,8 +5,7 @@ import * as core from '@actions/core';
 import { format } from 'date-fns';
 
 import { Client } from './client';
-import { padLeft } from './utils';
-import { getType, toCSV } from './output';
+import { printUsers, toCSV } from './output';
 
 function today(): string {
   const now = new Date();
@@ -21,18 +20,10 @@ async function run(): Promise<void> {
   const client = new Client(roomid, ruid);
   const list = await client.get();
 
-  {
-    let cnt = 1;
-    const width = String(list.length).length;
-    for (const user of list) {
-      core.info(
-        `${padLeft(String(cnt++), width)}. ${getType(user.level)} ${user.username} (uid: ${
-          user.uid
-        })`
-      );
-    }
-  }
+  // Print users
+  printUsers(list);
 
+  // Dump fetched list to csv
   {
     const csvname = path.join(outDir, `${today()}.csv`);
     const content = toCSV(list);

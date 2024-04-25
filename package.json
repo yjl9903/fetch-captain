@@ -19,7 +19,8 @@
     "build": "tsc",
     "format": "prettier --write ./src/*.ts",
     "package": "ncc build --license licenses.txt",
-    "release": "node ./scripts/release.mjs"
+    "release": "node ./scripts/release.mjs",
+    "start": "tsx scripts/run.ts"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
@@ -33,6 +34,7 @@
     "fs-extra": "11.1.1",
     "js-yaml": "4.1.0",
     "prettier": "^3.2.5",
+    "tsx": "^4.7.3",
     "typescript": "5.0.4"
   },
   "packageManager": "pnpm@9.0.6"

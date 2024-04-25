@@ -68,7 +68,7 @@ class Client {
             }
             catch (error) {
                 core.setFailed(error);
-                process.exit(1);
+                throw error;
             }
         });
     }
@@ -91,7 +91,7 @@ class Client {
             }
             catch (error) {
                 core.setFailed(error);
-                process.exit(1);
+                throw error;
             }
         });
     }
@@ -162,7 +162,6 @@ const fs_1 = __nccwpck_require__(7147);
 const core = __importStar(__nccwpck_require__(6733));
 const date_fns_1 = __nccwpck_require__(6044);
 const client_1 = __nccwpck_require__(3134);
-const utils_1 = __nccwpck_require__(6548);
 const output_1 = __nccwpck_require__(764);
 function today() {
     const now = new Date();
@@ -170,19 +169,15 @@ function today() {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const roomid = core.getInput('roomid');
         const ruid = core.getInput('ruid');
+        const roomid = core.getInput('roomid');
+        const outDir = core.getInput('outDir');
         const client = new client_1.Client(roomid, ruid);
         const list = yield client.get();
+        // Print users
+        (0, output_1.printUsers)(list);
+        // Dump fetched list to csv
         {
-            let cnt = 1;
-            const width = String(list.length).length;
-            for (const user of list) {
-                core.info(`${(0, utils_1.padLeft)(String(cnt++), width)}. ${(0, output_1.getType)(user.level)} ${user.username} (uid: ${user.uid})`);
-            }
-        }
-        {
-            const outDir = core.getInput('outDir');
             const csvname = path_1.default.join(outDir, `${today()}.csv`);
             const content = (0, output_1.toCSV)(list);
             core.info(`---------------------------------------`);
@@ -201,12 +196,37 @@ run();
 /***/ }),
 
 /***/ 764:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toMarkdown = exports.toCSV = exports.getType = void 0;
+exports.toMarkdown = exports.toCSV = exports.printUsers = void 0;
+const core = __importStar(__nccwpck_require__(6733));
+const utils_1 = __nccwpck_require__(6548);
 function getType(level) {
     if (level === 3)
         return '舰长';
@@ -216,21 +236,33 @@ function getType(level) {
         return '总督';
     return '舰长';
 }
-exports.getType = getType;
+function printUsers(list) {
+    let cnt = 1;
+    const width = String(list.length).length;
+    for (const user of list) {
+        const index = (0, utils_1.padLeft)(String(cnt++), width);
+        const type = getType(user.level);
+        const accompany = user.accompany ? `, accompany: ${user.accompany}` : '';
+        core.info(`${index}. ${type} ${user.username} (uid: ${user.uid}${accompany})`);
+    }
+}
+exports.printUsers = printUsers;
 function toCSV(list) {
-    const text = ['rank,uid,username,type'];
+    var _a;
+    const text = ['rank,uid,username,type,accompany'];
     let cnt = 1;
     for (const user of list) {
-        text.push(`${cnt++},${user.uid},${user.username},${getType(user.level)}`);
+        text.push(`${cnt++},${user.uid},${user.username},${getType(user.level)},${(_a = user.accompany) !== null && _a !== void 0 ? _a : ''}`);
     }
     return text.join('\n');
 }
 exports.toCSV = toCSV;
 function toMarkdown(list) {
-    const text = ['|序号|UID|用户名|大航海|', '|:-:|:-:|:-:|:-:|'];
+    var _a;
+    const text = ['|序号|UID|用户名|大航海|陪伴天数|', '|:-:|:-:|:-:|:-:|:-:|'];
     let cnt = 1;
     for (const user of list) {
-        text.push(`|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|`);
+        text.push(`|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|${(_a = user.accompany) !== null && _a !== void 0 ? _a : ''}|`);
     }
     return text.join('\n');
 }
