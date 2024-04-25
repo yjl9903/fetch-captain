@@ -1,6 +1,7 @@
 # Fetch Captain
 
-[![Build](https://github.com/yjl9903/fetch-captain/actions/workflows/ci.yml/badge.svg)](https://github.com/yjl9903/fetch-captain/actions/workflows/ci.yml) [![Check dist](https://github.com/yjl9903/fetch-captain/actions/workflows/check-dist.yml/badge.svg)](https://github.com/yjl9903/fetch-captain/actions/workflows/check-dist.yml)
+[![Build](https://github.com/yjl9903/fetch-captain/actions/workflows/ci.yml/badge.svg)](https://github.com/yjl9903/fetch-captain/actions/workflows/ci.yml)
+[![Check dist](https://github.com/yjl9903/fetch-captain/actions/workflows/check-dist.yml/badge.svg)](https://github.com/yjl9903/fetch-captain/actions/workflows/check-dist.yml)
 
 Automatically fetch the captain list of your favourite bilibili VUP.
 
