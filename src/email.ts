@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
-import { createTransport } from 'nodemailer';
-import { readFileSync } from 'fs';
 import MarkdownIt from 'markdown-it';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
+import { readFileSync } from 'fs';
+import { createTransport } from 'nodemailer';
 
 import { User } from './types';
 import { style } from './style';

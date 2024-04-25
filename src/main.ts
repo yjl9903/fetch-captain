@@ -1,8 +1,8 @@
-import * as core from '@actions/core';
-import format from 'date-fns/format';
-
 import path from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
+
+import * as core from '@actions/core';
+import { format } from 'date-fns';
 
 import { Client } from './client';
 import { padLeft } from './utils';
