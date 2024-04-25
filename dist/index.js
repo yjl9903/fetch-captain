@@ -182,22 +182,25 @@ function today() {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        const now = new Date();
         const ruid = core.getInput('ruid');
         const roomid = core.getInput('roomid');
-        const outDir = core.getInput('outDir');
+        const outputPattern = core.getInput('output');
         const client = new client_1.Client(roomid, ruid);
         const list = yield client.get();
         // Print users
         (0, output_1.printUsers)(list);
         // Dump fetched list to csv
         {
-            const csvname = path_1.default.join(outDir, `${today()}.csv`);
+            const csvname = (0, date_fns_1.format)(now, outputPattern);
             const content = (0, output_1.toCSV)(list);
             core.info(`---------------------------------------`);
             core.info(`Writing to ${csvname}`);
+            // Set output `csv` for further usage
             core.setOutput('csv', csvname);
-            if (!(0, fs_1.existsSync)(outDir)) {
-                (0, fs_1.mkdirSync)(outDir, { recursive: true });
+            // Dump csv
+            if (!(0, fs_1.existsSync)(path_1.default.dirname(csvname))) {
+                (0, fs_1.mkdirSync)(path_1.default.dirname(csvname), { recursive: true });
             }
             (0, fs_1.writeFileSync)(csvname, content, 'utf-8');
         }

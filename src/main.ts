@@ -13,9 +13,11 @@ function today(): string {
 }
 
 async function run(): Promise<void> {
+  const now = new Date();
+
   const ruid = core.getInput('ruid');
   const roomid = core.getInput('roomid');
-  const outDir = core.getInput('outDir');
+  const outputPattern = core.getInput('output');
 
   const client = new Client(roomid, ruid);
   const list = await client.get();
@@ -25,13 +27,18 @@ async function run(): Promise<void> {
 
   // Dump fetched list to csv
   {
-    const csvname = path.join(outDir, `${today()}.csv`);
+    const csvname = format(now, outputPattern);
+
     const content = toCSV(list);
     core.info(`---------------------------------------`);
     core.info(`Writing to ${csvname}`);
+
+    // Set output `csv` for further usage
     core.setOutput('csv', csvname);
-    if (!existsSync(outDir)) {
-      mkdirSync(outDir, { recursive: true });
+
+    // Dump csv
+    if (!existsSync(path.dirname(csvname))) {
+      mkdirSync(path.dirname(csvname), { recursive: true });
     }
     writeFileSync(csvname, content, 'utf-8');
   }

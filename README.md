@@ -10,16 +10,22 @@ Automatically fetch the captain list of your favourite bilibili VUP.
 Add the following config to your Github Actions. Fill roomid and ruid.
 
 ```yml
-- uses: yjl9903/fetch-captain@v0
+- uses: yjl9903/fetch-captain@v1
   with:
     ruid: <UID>
     roomid: <直播间 ID>
-    # outDir: './'
+    # output: './yyyy-MM-dd.csv'
 ```
 
 Notice that you should push changes (e.g. `./2022-3-5.csv`) in your following actions steps manually.
 
-Example repo: [Miki-Captain](https://github.com/yjl9903/Miki-Captain).
+Example repo: [Miki-Captain](https://github.com/yjl9903/Miki-Captain), [Nagisa-Captain](https://github.com/yjl9903/Nagisa-Captain).
+
+> 👷 **Migration from v0 to v1**
+>
+> **Sending email is deprecated**: If you still want to use it, please combine this action with other stuffs.
+>
+> **CSV output path**: Change `outdir` to `output`, which means the output file pattern instead of output directory. It uses [date-fns/format](https://date-fns.org/v3.6.0/docs/format) to format date string under the hood. By default, it will dump csv file to `./yyyy-MM-dd.csv` (i.e. `./2024-04-25.csv`).
 
 ## License
 

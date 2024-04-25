@@ -7,14 +7,14 @@ author: 'yjl9903'
 inputs:
   ruid:
     required: true
-    description: 'up 主 uid'
+    description: 'Up 主 uid'
   roomid:
     required: true
     description: '直播房间 id'
-  outDir:
+  output:
     required: false
-    description: '输出目录'
-    default: './'
+    description: '输出 CSV 文件路径'
+    default: './yyyy-MM-dd.csv'
 
 runs:
   using: 'node20'
