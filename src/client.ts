@@ -1,8 +1,20 @@
 import * as core from '@actions/core';
 import axios from 'axios';
 
-import { User } from './types';
+import type { User, Captain } from './types';
+
 import { retry } from './utils';
+
+type RawCaptain = Omit<Captain, 'level' | 'medal'> & {
+  guard_level: number;
+  medal_info: {
+    medal_name: string;
+    medal_level: number;
+    medal_color_start: number;
+    medal_color_end: number;
+    medal_color_border: number;
+  };
+};
 
 export class Client {
   private readonly roomid: string;
@@ -32,10 +44,10 @@ export class Client {
     }
   }
 
-  private async fetch(page: number): Promise<Array<User & { guard_level: number }>> {
+  private async fetch(page: number): Promise<RawCaptain[]> {
     try {
       const { data } = await retry(() =>
-        axios.get('https://api.live.bilibili.com/guard/topList', {
+        axios.get('https://api.live.bilibili.com/xlive/app-room/v2/guardTab/topList', {
           params: {
             roomid: this.roomid,
             ruid: this.ruid,
@@ -54,7 +66,7 @@ export class Client {
     }
   }
 
-  async get(): Promise<User[]> {
+  async get(): Promise<Captain[]> {
     const ans = [];
     for (let i = 1; ; i++) {
       const res = await this.fetch(i);
@@ -65,7 +77,20 @@ export class Client {
     }
 
     return ans
-      .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
-      .sort((lhs, rhs) => (lhs.level ?? 3) - (rhs.level ?? 3));
+      .map((u) => ({
+        rank: u.rank,
+        uid: u.uid,
+        username: u.username,
+        level: u.guard_level,
+        accompany: u.accompany,
+        medal: {
+          name: u.medal_info.medal_name,
+          level: u.medal_info.medal_level,
+          colorStart: u.medal_info.medal_color_start,
+          colorEnd: u.medal_info.medal_color_end,
+          colorBorder: u.medal_info.medal_color_border
+        }
+      }))
+      .sort((lhs, rhs) => lhs.rank - rhs.rank);
   }
 }

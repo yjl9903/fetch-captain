@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 
-import type { User } from './types';
+import type { Captain } from './types';
 
 import { padLeft } from './utils';
 
@@ -11,34 +11,33 @@ function getType(level?: number): string {
   return '舰长';
 }
 
-export function printUsers(list: User[]) {
-  let cnt = 1;
+export function printUsers(list: Captain[]) {
   const width = String(list.length).length;
   for (const user of list) {
-    const index = padLeft(String(cnt++), width);
+    const index = padLeft(String(user.rank), width);
     const type = getType(user.level);
-    const accompany = user.accompany ? `, accompany: ${user.accompany}` : '';
-    core.info(`${index}. ${type} ${user.username} (uid: ${user.uid}${accompany})`);
+    const medal = `${padLeft(String(user.medal.level), 2)}级${user.medal.name}`;
+    const accompany = `陪伴了主播 ${user.accompany} 天`;
+    core.info(`${index}. ${type} ${medal} ${user.username} (uid: ${user.uid}) ${accompany}`);
   }
 }
 
-export function toCSV(list: User[]): string {
-  const text = ['rank,uid,username,type,accompany'];
-  let cnt = 1;
+export function toCSV(list: Captain[]): string {
+  const text = ['rank,uid,username,type,accompany,medal_name,medal_level'];
   for (const user of list) {
+    const type = getType(user.level);
     text.push(
-      `${cnt++},${user.uid},${user.username},${getType(user.level)},${user.accompany ?? ''}`
+      `${user.rank},${user.uid},${user.username},${type},${user.accompany},${user.medal.name},${user.medal.level}`
     );
   }
   return text.join('\n');
 }
 
-export function toMarkdown(list: User[]): string {
-  const text = ['|序号|UID|用户名|大航海|陪伴天数|', '|:-:|:-:|:-:|:-:|:-:|'];
-  let cnt = 1;
+export function toMarkdown(list: Captain[]): string {
+  const text = ['|序号|UID|用户名|大航海|陪伴天数|粉丝牌|等级|', '|:-:|:-:|:-:|:-:|:-:|:-:|:-:|'];
   for (const user of list) {
     text.push(
-      `|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|${user.accompany ?? ''}|`
+      `|${user.rank}|${user.uid}|${user.username}|${getType(user.level)}|${user.accompany}|${user.medal.name}|${user.medal.level}|`
     );
   }
   return text.join('\n');

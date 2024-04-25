@@ -75,7 +75,7 @@ class Client {
     fetch(page) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { data } = yield (0, utils_1.retry)(() => axios_1.default.get('https://api.live.bilibili.com/guard/topList', {
+                const { data } = yield (0, utils_1.retry)(() => axios_1.default.get('https://api.live.bilibili.com/xlive/app-room/v2/guardTab/topList', {
                     params: {
                         roomid: this.roomid,
                         ruid: this.ruid,
@@ -106,8 +106,21 @@ class Client {
                 ans.push(...res);
             }
             return ans
-                .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
-                .sort((lhs, rhs) => { var _a, _b; return ((_a = lhs.level) !== null && _a !== void 0 ? _a : 3) - ((_b = rhs.level) !== null && _b !== void 0 ? _b : 3); });
+                .map((u) => ({
+                rank: u.rank,
+                uid: u.uid,
+                username: u.username,
+                level: u.guard_level,
+                accompany: u.accompany,
+                medal: {
+                    name: u.medal_info.medal_name,
+                    level: u.medal_info.medal_level,
+                    colorStart: u.medal_info.medal_color_start,
+                    colorEnd: u.medal_info.medal_color_end,
+                    colorBorder: u.medal_info.medal_color_border
+                }
+            }))
+                .sort((lhs, rhs) => lhs.rank - rhs.rank);
         });
     }
 }
@@ -237,32 +250,29 @@ function getType(level) {
     return '舰长';
 }
 function printUsers(list) {
-    let cnt = 1;
     const width = String(list.length).length;
     for (const user of list) {
-        const index = (0, utils_1.padLeft)(String(cnt++), width);
+        const index = (0, utils_1.padLeft)(String(user.rank), width);
         const type = getType(user.level);
-        const accompany = user.accompany ? `, accompany: ${user.accompany}` : '';
-        core.info(`${index}. ${type} ${user.username} (uid: ${user.uid}${accompany})`);
+        const medal = `${(0, utils_1.padLeft)(String(user.medal.level), 2)}级${user.medal.name}`;
+        const accompany = `陪伴了主播 ${user.accompany} 天`;
+        core.info(`${index}. ${type} ${medal} ${user.username} (uid: ${user.uid}) ${accompany}`);
     }
 }
 exports.printUsers = printUsers;
 function toCSV(list) {
-    var _a;
-    const text = ['rank,uid,username,type,accompany'];
-    let cnt = 1;
+    const text = ['rank,uid,username,type,accompany,medal_name,medal_level'];
     for (const user of list) {
-        text.push(`${cnt++},${user.uid},${user.username},${getType(user.level)},${(_a = user.accompany) !== null && _a !== void 0 ? _a : ''}`);
+        const type = getType(user.level);
+        text.push(`${user.rank},${user.uid},${user.username},${type},${user.accompany},${user.medal.name},${user.medal.level}`);
     }
     return text.join('\n');
 }
 exports.toCSV = toCSV;
 function toMarkdown(list) {
-    var _a;
-    const text = ['|序号|UID|用户名|大航海|陪伴天数|', '|:-:|:-:|:-:|:-:|:-:|'];
-    let cnt = 1;
+    const text = ['|序号|UID|用户名|大航海|陪伴天数|粉丝牌|等级|', '|:-:|:-:|:-:|:-:|:-:|:-:|:-:|'];
     for (const user of list) {
-        text.push(`|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|${(_a = user.accompany) !== null && _a !== void 0 ? _a : ''}|`);
+        text.push(`|${user.rank}|${user.uid}|${user.username}|${getType(user.level)}|${user.accompany}|${user.medal.name}|${user.medal.level}|`);
     }
     return text.join('\n');
 }
