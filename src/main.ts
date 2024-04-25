@@ -6,12 +6,11 @@ import { format } from 'date-fns';
 
 import { Client } from './client';
 import { padLeft } from './utils';
-import { sendEmail } from './email';
 import { getType, toCSV } from './output';
 
-function today(offset = 0): string {
-  const date = new Date(new Date().getTime() - offset);
-  return format(date, 'yyyy-MM-dd');
+function today(): string {
+  const now = new Date();
+  return format(now, 'yyyy-MM-dd');
 }
 
 async function run(): Promise<void> {
@@ -34,7 +33,7 @@ async function run(): Promise<void> {
   }
   {
     const outDir = core.getInput('outDir');
-    const csvname = path.join(outDir, `${today(+core.getInput('offset'))}.csv`);
+    const csvname = path.join(outDir, `${today()}.csv`);
     const content = toCSV(list);
     core.info(`---------------------------------------`);
     core.info(`Writing to ${csvname}`);
@@ -44,8 +43,6 @@ async function run(): Promise<void> {
     }
     writeFileSync(csvname, content, 'utf-8');
   }
-
-  await sendEmail(client, list);
 }
 
 run();

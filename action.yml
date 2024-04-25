@@ -15,10 +15,6 @@ inputs:
     required: false
     description: '输出目录'
     default: './'
-  offset:
-    required: false
-    description: '时间偏移量'
-    default: '0'
 
 runs:
   using: 'node20'
