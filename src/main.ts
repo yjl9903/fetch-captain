@@ -2,15 +2,10 @@ import path from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 import * as core from '@actions/core';
-import { format } from 'date-fns';
 
 import { Client } from './client';
+import { format } from './utils';
 import { printUsers, toCSV } from './output';
-
-function today(): string {
-  const now = new Date();
-  return format(now, 'yyyy-MM-dd');
-}
 
 async function run(): Promise<void> {
   const now = new Date();

@@ -46,7 +46,7 @@ jobs:
         with:
           ruid: '477317922'
           roomid: '21672023'
-          output: './data/yyyy-MM-dd.csv'
+          output: './data/YYYY-MM-DD.csv'
 
       - uses: actions/upload-artifact@v4
         with:

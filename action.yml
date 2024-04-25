@@ -14,7 +14,7 @@ inputs:
   output:
     required: false
     description: '输出 CSV 文件路径'
-    default: './yyyy-MM-dd.csv'
+    default: './YYYY-MM-DD.csv'
 
 runs:
   using: 'node20'

@@ -14,7 +14,7 @@ Add the following config to your Github Actions. Fill roomid and ruid.
   with:
     ruid: <UID>
     roomid: <直播间 ID>
-    # output: './yyyy-MM-dd.csv'
+    # output: './YYYY-MM-DD.csv'
 ```
 
 Notice that you should push changes (e.g. `./2022-3-5.csv`) in your following actions steps manually.
@@ -25,7 +25,7 @@ Example repo: [Miki-Captain](https://github.com/yjl9903/Miki-Captain), [Nagisa-C
 >
 > **Sending email is deprecated**: If you still want to use it, please combine this action with other stuffs.
 >
-> **CSV output path**: Change `outdir` to `output`, which means the output file pattern instead of output directory. It uses [date-fns/format](https://date-fns.org/v3.6.0/docs/format) to format date string under the hood. By default, it will dump csv file to `./yyyy-MM-dd.csv` (i.e. `./2024-04-25.csv`).
+> **CSV output path**: Change `outdir` to `output`, which means the output file pattern instead of output directory. It uses supports some date placeholder, including `YYYY`, `MM`, `DD`. By default, it will dump csv file to `./YYYY-MM-DD.csv` (i.e. `./2024-04-25.csv`).
 
 ## License
 
