@@ -329,9 +329,9 @@ function padLeft(text, length, space = ' ') {
 exports.padLeft = padLeft;
 function format(now, pattern) {
     return pattern
-        .replace(/{(YYYY)}/g, now.getFullYear().toString())
-        .replace(/{MM}/g, (now.getMonth() + 1).toString().padStart(2, '0'))
-        .replace(/{DD}/g, now.getDate().toString().padStart(2, '0'));
+        .replace(/YYYY/g, now.getFullYear().toString())
+        .replace(/MM/g, (now.getMonth() + 1).toString().padStart(2, '0'))
+        .replace(/DD/g, now.getDate().toString().padStart(2, '0'));
 }
 exports.format = format;
 
