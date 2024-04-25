@@ -14,10 +14,11 @@ function today(): string {
 }
 
 async function run(): Promise<void> {
-  const roomid = core.getInput('roomid');
   const ruid = core.getInput('ruid');
-  const client = new Client(roomid, ruid);
+  const roomid = core.getInput('roomid');
+  const outDir = core.getInput('outDir');
 
+  const client = new Client(roomid, ruid);
   const list = await client.get();
 
   {
@@ -31,8 +32,8 @@ async function run(): Promise<void> {
       );
     }
   }
+
   {
-    const outDir = core.getInput('outDir');
     const csvname = path.join(outDir, `${today()}.csv`);
     const content = toCSV(list);
     core.info(`---------------------------------------`);

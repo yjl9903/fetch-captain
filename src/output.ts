@@ -8,19 +8,23 @@ export function getType(level?: number): string {
 }
 
 export function toCSV(list: User[]): string {
-  const text = ['rank,uid,username,type'];
+  const text = ['rank,uid,username,type,accompany'];
   let cnt = 1;
   for (const user of list) {
-    text.push(`${cnt++},${user.uid},${user.username},${getType(user.level)}`);
+    text.push(
+      `${cnt++},${user.uid},${user.username},${getType(user.level)},${user.accompany ?? ''}`
+    );
   }
   return text.join('\n');
 }
 
 export function toMarkdown(list: User[]): string {
-  const text = ['|序号|UID|用户名|大航海|', '|:-:|:-:|:-:|:-:|'];
+  const text = ['|序号|UID|用户名|大航海|陪伴天数|', '|:-:|:-:|:-:|:-:|:-:|'];
   let cnt = 1;
   for (const user of list) {
-    text.push(`|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|`);
+    text.push(
+      `|${cnt++}|${user.uid}|${user.username}|${getType(user.level)}|${user.accompany ?? ''}|`
+    );
   }
   return text.join('\n');
 }

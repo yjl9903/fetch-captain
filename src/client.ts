@@ -28,7 +28,7 @@ export class Client {
       }, 50);
     } catch (error: unknown) {
       core.setFailed(error as any);
-      process.exit(1);
+      throw error;
     }
   }
 
@@ -50,7 +50,7 @@ export class Client {
       }
     } catch (error: unknown) {
       core.setFailed(error as any);
-      process.exit(1);
+      throw error;
     }
   }
 
@@ -63,6 +63,7 @@ export class Client {
       }
       ans.push(...res);
     }
+
     return ans
       .map((u) => ({ uid: u.uid, username: u.username, level: u.guard_level }))
       .sort((lhs, rhs) => (lhs.level ?? 3) - (rhs.level ?? 3));
